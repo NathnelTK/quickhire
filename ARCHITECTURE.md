@@ -56,6 +56,15 @@ The API is the composition root: it registers Application and Infrastructure ser
 5. Add tests beside the layer being tested: domain/application unit tests, infrastructure/API integration tests, and frontend tests for UI behavior.
 6. Agree on unresolved vocabulary (especially authorization roles) with the team before implementing authentication or access policies.
 
+## Authentication Boundaries
+
+- `QuickHire.Domain` stays independent of ASP.NET Core Identity. Do not make a Domain user inherit from `IdentityUser`.
+- `QuickHire.Application` defines login use-case contracts, DTOs, validation, and the token-issuing abstraction.
+- `QuickHire.Infrastructure` owns the Identity user type and persistence integration (for example, `ApplicationUser : IdentityUser<Guid>` and an Identity-aware `AppDbContext`), plus the token-issuing implementation.
+- `QuickHire.Api` configures JWT Bearer validation and exposes the login endpoint. Protect HR endpoints with `[Authorize]`; allow anonymous access only where intended, such as login and any explicitly public applicant submission flow.
+- Keep signing keys in .NET user-secrets during development and environment-provided secrets in deployed environments. Never commit signing keys or put them in Angular configuration.
+- MVP access tokens expire after 12 hours; refresh tokens are deferred. Validate signature, issuer, audience, and lifetime.
+
 ## Current Foundation
 
 The solution contains the four backend projects and the dependency references above. The Domain has the initial entities and status enums named in the execution plan. EF Core, PostgreSQL configuration, use cases, authentication, and the Angular workspace remain subsequent setup tasks. The Angular folder and data-flow conventions are documented separately; frontend implementation remains with the frontend developer.

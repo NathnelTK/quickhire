@@ -37,10 +37,24 @@ QuickHire.Application ───────────────┴──► 
 
 Arrows indicate project references, not runtime call order. The Domain has no project references. Application references only Domain. Infrastructure references Application and Domain. API is the composition root and references Application and Infrastructure. Keep these rules in sync with [ARCHITECTURE.md](ARCHITECTURE.md).
 
-1. **Domain Layer (`QuickHire.Domain`):** No external dependencies. Contains entities (`Employee`, `Department`, `JobPosting`, `Applicant`), enums (`JobStatus`, `Role`), and custom exceptions.
+1. **Domain Layer (`QuickHire.Domain`):** No external dependencies. Contains entities (`Employee`, `Department`, `JobPosting`, `Applicant`), business enums, and custom exceptions. It must not reference ASP.NET Core Identity or inherit from `IdentityUser`.
 2. **Application Layer (`QuickHire.Application`):** Contains DTOs, interfaces for repositories, business service contracts, mapping profiles, and validation logic.
 3. **Infrastructure Layer (`QuickHire.Infrastructure`):** Implements `AppDbContext`, EF Core configurations, repository patterns, migrations, and database seeders.
 4. **Web API Layer (`QuickHire.Api`):** Controllers, Middleware (Global exception handling, CORS), Dependency Injection registration, and Swagger configuration.
+
+### Authentication Decision & Layer Ownership
+
+The MVP uses **ASP.NET Core Identity** for user storage and **JWT Bearer Authentication** for API access. Access tokens expire after **12 hours**; refresh tokens are out of scope for the MVP.
+
+- **Domain:** Remains framework-independent. Do not derive a Domain entity from `IdentityUser`; the Identity user is an infrastructure persistence concern.
+- **Application:** Owns login use-case contracts, request/response DTOs, validation, and the token-issuing abstraction.
+- **Infrastructure:** Adds `Microsoft.AspNetCore.Identity.EntityFrameworkCore`, defines an Identity user (for example, `ApplicationUser : IdentityUser<Guid>`), integrates Identity with `AppDbContext`, and implements token issuance.
+- **API:** Adds `Microsoft.AspNetCore.Authentication.JwtBearer`, exposes `POST /api/auth/login`, validates JWT signature, issuer, audience, and lifetime, and protects employee/recruitment endpoints with `[Authorize]`. The login endpoint is `[AllowAnonymous]`.
+- **Angular:** Adds a login flow and `AuthService`, stores the access token in `localStorage` for this MVP, attaches it with an HTTP interceptor, and uses an auth guard for private routes. The guard is for navigation only; the API remains the security boundary.
+
+Keep signing keys out of source control and frontend configuration. Use .NET user-secrets locally and environment-provided secrets in deployed environments. Since JavaScript can read `localStorage`, an XSS vulnerability could expose the token; use HTTPS and revisit HttpOnly-cookie/BFF storage before production.
+
+Authentication must be integrated with the Identity database schema before the feature API PRs are protected. Agree on role names and claims across the backend and frontend before enforcing role-based authorization.
 
 ---
 
@@ -68,7 +82,7 @@ Follow this dependency sequence step-by-step so team members are not blocked by 
 ```
 PR #1: Project Base Structure Setup (Lead / DB)
   │
-  ├─► PR #2: Database Schema & Migrations (Fourth Member)
+  ├─► PR #2: Database, Identity & JWT Foundation (Fourth Member, Negeda, Sami)
   │     │
   │     ├─► PR #3: Employee API Module (Negeda) ───┐
   │     │                                           ├──► PR #6: Integration & Final Polish
@@ -90,14 +104,17 @@ PR #1: Project Base Structure Setup (Lead / DB)
 
 ---
 
-### Step 2: Database Layer & Data Access
-* **PR Target:** `PR #2: EF Core DbContext & Migrations Setup`
-* **Assignee:** Fourth Member
+### Step 2: Database, Identity & Authentication Foundation
+* **PR Target:** `PR #2: Database, Identity & JWT Foundation`
+* **Assignee:** Fourth Member (database), Negeda & Sami (backend authentication)
 * **Tasks:**
   * Configure `AppDbContext` and entity relationships (One-to-Many: Department -> Employees; JobPosting -> Applicants).
-  * Add EF Core migration (`InitialCreate`).
+  * Configure ASP.NET Core Identity in Infrastructure and include its schema in the initial EF Core migration (`InitialCreate`).
+  * Implement the Application login contract and Infrastructure Identity/token services.
+  * Configure JWT Bearer validation and `POST /api/auth/login` in the API; keep the signing key in user-secrets or environment configuration.
+  * Set access-token expiry to 12 hours; omit refresh tokens for the MVP.
   * Create database seeder with realistic test data (5 departments, 10 employees, 3 job postings).
-* **Acceptance Criteria:** `dotnet ef database update` executes cleanly against a local PostgreSQL database and populates sample data.
+* **Acceptance Criteria:** `dotnet ef database update` executes cleanly against a local PostgreSQL database, creates the Identity schema, and populates sample data. Valid credentials receive a signed 12-hour token; invalid credentials receive `401 Unauthorized`.
 
 ---
 
@@ -109,8 +126,8 @@ PR #1: Project Base Structure Setup (Lead / DB)
 * **Tasks:**
   * Create `EmployeeDto`, `CreateEmployeeDto`, `UpdateEmployeeDto`.
   * Implement `IEmployeeService` and `EmployeeService`.
-  * Build `EmployeesController` (`GET /api/employees`, `GET /api/employees/{id}`, `POST /api/employees`, `PUT /api/employees/{id}`, `DELETE /api/employees/{id}`).
-* **Acceptance Criteria:** All CRUD operations work via Swagger UI with validation on required fields.
+  * Build `EmployeesController` (`GET /api/employees`, `GET /api/employees/{id}`, `POST /api/employees`, `PUT /api/employees/{id}`, `DELETE /api/employees/{id}`) and protect it with `[Authorize]`.
+* **Acceptance Criteria:** All CRUD operations work via Swagger UI with validation on required fields; requests without a valid bearer token receive `401 Unauthorized`.
 
 #### Module B: Recruitment & Hiring Workflow
 * **PR Target:** `PR #4: Job Postings & Applicant Workflow API`
@@ -118,8 +135,8 @@ PR #1: Project Base Structure Setup (Lead / DB)
 * **Tasks:**
   * Create `JobPostingDto` and `ApplicantDto`.
   * Implement service for handling job creation, status updates (`Open`, `Closed`), and application submissions.
-  * Build `JobsController` and `ApplicantsController`.
-* **Acceptance Criteria:** Candidates can submit applications to active job postings; HR can update application status (`Received`, `Interviewing`, `Hired`, `Rejected`).
+  * Build `JobsController` and `ApplicantsController`; protect HR operations with `[Authorize]`.
+* **Acceptance Criteria:** Candidates can submit applications to active job postings; HR can update application status (`Received`, `Interviewing`, `Hired`, `Rejected`); protected HR endpoints reject requests without a valid bearer token.
 
 ---
 
@@ -128,11 +145,13 @@ PR #1: Project Base Structure Setup (Lead / DB)
 * **Assignee:** Roman
 * **Tasks:**
   * Implement navigation layout (Header, Sidebar, Routing Module).
+  * Implement login UI and `AuthService` for `POST /api/auth/login`.
+  * Store the access token in `localStorage`, attach it to API requests with an HTTP interceptor, and protect private routes with an auth guard.
   * Create `EmployeeService` and `JobService` in Angular using `HttpClient`.
   * Build components:
     * **Employee List & Form:** Data table with search/filter, dialog form for creating/editing employees.
     * **Job Openings View:** Cards showing active job postings and a submission form for applicants.
-* **Acceptance Criteria:** UI connects to backend endpoints; loading states and error toasts are displayed.
+* **Acceptance Criteria:** A user can log in, navigate protected routes, and call protected API endpoints with the bearer token; UI loading states and error feedback are displayed. Unauthenticated users are redirected by the guard, and the API independently returns `401 Unauthorized` for protected requests.
 
 ---
 
@@ -159,15 +178,18 @@ Use this checklist during standup meetings to monitor status:
 - [ ] **Phase 2: Database & Core Entities**
   - [ ] PostgreSQL connected locally
   - [ ] Initial EF Core migration generated
+  - [ ] Identity schema included in migration; JWT login returns a signed token
   - [ ] Seed data populated
 
 - [ ] **Phase 3: APIs & Business Logic**
+  - [ ] Protected endpoints reject missing or invalid bearer tokens
   - [ ] Employee API endpoints verified in Swagger
   - [ ] Job Posting & Applicant endpoints verified in Swagger
   - [ ] Global exception handling middleware added
 
 - [ ] **Phase 4: Frontend & UI Integration**
   - [ ] Angular Layout & Navigation functional
+  - [ ] Login, token interceptor, and private-route guard functional
   - [ ] Employee CRUD views connected to API
   - [ ] Job Posting views connected to API
 
