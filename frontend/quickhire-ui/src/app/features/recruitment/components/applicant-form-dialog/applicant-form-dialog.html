@@ -1,0 +1,52 @@
+@if (job(); as posting) {
+  <div class="overlay" (click)="closed.emit()">
+    <div
+      class="dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'Apply for ' + posting.title"
+      (click)="$event.stopPropagation()"
+    >
+      <h2 class="dialog__title">Apply — {{ posting.title }}</h2>
+
+      <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form__row">
+          <label class="field">
+            <span class="field__label">First name</span>
+            <input class="field__input" type="text" formControlName="firstName" />
+            @if (isInvalid('firstName')) {
+              <span class="field__error">First name is required.</span>
+            }
+          </label>
+
+          <label class="field">
+            <span class="field__label">Last name</span>
+            <input class="field__input" type="text" formControlName="lastName" />
+            @if (isInvalid('lastName')) {
+              <span class="field__error">Last name is required.</span>
+            }
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input class="field__input" type="email" formControlName="email" />
+          @if (isInvalid('email')) {
+            <span class="field__error">A valid email is required.</span>
+          }
+        </label>
+
+        @if (formError(); as message) {
+          <p class="form__error">{{ message }}</p>
+        }
+
+        <div class="dialog__actions">
+          <button type="button" class="button" (click)="closed.emit()">Cancel</button>
+          <button type="submit" class="button button--primary" [disabled]="saving()">
+            {{ saving() ? 'Sending…' : 'Submit application' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

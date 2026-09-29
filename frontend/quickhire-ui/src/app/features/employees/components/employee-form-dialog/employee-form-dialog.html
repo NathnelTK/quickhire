@@ -1,0 +1,75 @@
+@if (isOpen) {
+  <div class="overlay" (click)="closed.emit()">
+    <div
+      class="dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="heading"
+      (click)="$event.stopPropagation()"
+    >
+      <h2 class="dialog__title">{{ heading }}</h2>
+
+      <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form__row">
+          <label class="field">
+            <span class="field__label">First name</span>
+            <input class="field__input" type="text" formControlName="firstName" />
+            @if (isInvalid('firstName')) {
+              <span class="field__error">First name is required.</span>
+            }
+          </label>
+
+          <label class="field">
+            <span class="field__label">Last name</span>
+            <input class="field__input" type="text" formControlName="lastName" />
+            @if (isInvalid('lastName')) {
+              <span class="field__error">Last name is required.</span>
+            }
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input class="field__input" type="email" formControlName="email" />
+          @if (isInvalid('email')) {
+            <span class="field__error">A valid email is required.</span>
+          }
+        </label>
+
+        <div class="form__row">
+          <label class="field">
+            <span class="field__label">Date hired</span>
+            <input class="field__input" type="date" formControlName="dateHired" />
+            @if (isInvalid('dateHired')) {
+              <span class="field__error">Date hired is required.</span>
+            }
+          </label>
+
+          <label class="field">
+            <span class="field__label">Department</span>
+            <select class="field__input" formControlName="departmentId">
+              <option value="">Select a department</option>
+              @for (department of departments(); track department.id) {
+                <option [value]="department.id">{{ department.name }}</option>
+              }
+            </select>
+            @if (isInvalid('departmentId')) {
+              <span class="field__error">Department is required.</span>
+            }
+          </label>
+        </div>
+
+        @if (formError(); as message) {
+          <p class="form__error">{{ message }}</p>
+        }
+
+        <div class="dialog__actions">
+          <button type="button" class="button" (click)="closed.emit()">Cancel</button>
+          <button type="submit" class="button button--primary" [disabled]="saving()">
+            {{ saving() ? 'Saving…' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

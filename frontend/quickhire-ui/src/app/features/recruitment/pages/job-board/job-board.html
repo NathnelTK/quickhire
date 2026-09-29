@@ -1,0 +1,38 @@
+<header class="page__header">
+  <h1 class="page__title">Job openings</h1>
+</header>
+
+@if (loading()) {
+  <p class="state">Loading openings…</p>
+} @else if (error(); as message) {
+  <div class="state state--error">
+    <p>{{ message }}</p>
+    <button type="button" class="button" (click)="load()">Retry</button>
+  </div>
+} @else if (jobs().length === 0) {
+  <p class="state">No job postings yet.</p>
+} @else {
+  <div class="cards">
+    @for (job of jobs(); track trackById($index, job)) {
+      <article class="card">
+        <header class="card__header">
+          <h2 class="card__title">{{ job.title }}</h2>
+          <span class="badge" [class.badge--closed]="job.status === 'Closed'">{{ job.status }}</span>
+        </header>
+
+        <p class="card__description">{{ job.description }}</p>
+
+        <footer class="card__footer">
+          <span class="card__posted">Posted {{ job.postedAt | date: 'mediumDate' }}</span>
+          @if (job.status === 'Open') {
+            <button type="button" class="button button--primary" (click)="applyTo.set(job)">
+              Apply
+            </button>
+          }
+        </footer>
+      </article>
+    }
+  </div>
+}
+
+<app-applicant-form-dialog [job]="applyTo()" (closed)="applyTo.set(null)" />

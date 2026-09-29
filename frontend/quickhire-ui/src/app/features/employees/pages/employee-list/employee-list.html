@@ -1,0 +1,72 @@
+<header class="page__header">
+  <h1 class="page__title">Employees</h1>
+  <button type="button" class="button button--primary" (click)="dialog.set('new')">
+    Add employee
+  </button>
+</header>
+
+<div class="toolbar">
+  <input
+    class="input"
+    type="search"
+    placeholder="Search by name or email"
+    [ngModel]="search()"
+    (ngModelChange)="search.set($event)"
+    aria-label="Search employees"
+  />
+
+  <select
+    class="input"
+    [ngModel]="departmentFilter()"
+    (ngModelChange)="departmentFilter.set($event)"
+    aria-label="Filter by department"
+  >
+    <option value="all">All departments</option>
+    @for (department of departments(); track department.id) {
+      <option [value]="department.id">{{ department.name }}</option>
+    }
+  </select>
+</div>
+
+@if (loading()) {
+  <p class="state">Loading employees…</p>
+} @else if (error(); as message) {
+  <div class="state state--error">
+    <p>{{ message }}</p>
+    <button type="button" class="button" (click)="load()">Retry</button>
+  </div>
+} @else if (filtered().length === 0) {
+  <p class="state">No employees match your search.</p>
+} @else {
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Department</th>
+        <th scope="col">Hired</th>
+        <th scope="col"><span class="visually-hidden">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (employee of filtered(); track trackById($index, employee)) {
+        <tr>
+          <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.departmentName ?? '—' }}</td>
+          <td>{{ employee.dateHired | date: 'mediumDate' }}</td>
+          <td class="table__actions">
+            <button type="button" class="button button--ghost" (click)="dialog.set(employee)">
+              Edit
+            </button>
+            <button type="button" class="button button--ghost" (click)="remove(employee)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+<app-employee-form-dialog [target]="dialog()" (closed)="dialog.set(null)" />
