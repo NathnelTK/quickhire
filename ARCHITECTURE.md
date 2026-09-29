@@ -67,4 +67,10 @@ The API is the composition root: it registers Application and Infrastructure ser
 
 ## Current Foundation
 
-The solution contains the four backend projects and the dependency references above. The Domain has the initial entities and status enums named in the execution plan. EF Core, PostgreSQL configuration, use cases, authentication, and the Angular workspace remain subsequent setup tasks. The Angular folder and data-flow conventions are documented separately; frontend implementation remains with the frontend developer.
+The backend provides PostgreSQL persistence, EF Core mappings, business and ASP.NET Identity migrations, employee and department CRUD, and job/application workflows. Development startup applies migrations and seeds roles, demo users, five departments, ten employees, three job postings, and sample applicants. The local demo users are `admin@quickhire.local`, `recruiter@quickhire.local`, and `employee@quickhire.local`; the Development-only sample password is `QuickHireDemo!2026`. Override it with `DemoUsers:Password` when needed.
+
+Configure `ConnectionStrings:DefaultConnection`, `Jwt:SigningKey` (at least 32 bytes), `Jwt:Issuer`, and `Jwt:Audience` for the target environment. Keep the signing key in User Secrets locally and in a secret manager/environment variable when deployed. Set `Cors:AllowedOrigins` to the deployed frontend origin.
+
+The Angular client uses the API at `http://localhost:5045` in development. `/jobs` is the public jobseeker page; `/recruiter` is a separate role-guarded hiring workspace. Employee/department tools and the dashboard require team sign-in. Applicants may browse and apply without an account.
+
+Start the API with `dotnet run --project backend/QuickHire.Api --launch-profile http`; start the UI from `frontend/quickhire-ui` with `npm start`. This is an MVP auth design: the UI stores bearer tokens in `localStorage`, so production deployment should use HTTPS, a strong managed signing key, and review the token-storage/XSS tradeoff.

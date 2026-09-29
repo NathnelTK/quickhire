@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace QuickHire.Application.Departments.Dtos;
 
-public sealed record CreateDepartmentDto(string Name);
+public sealed record CreateDepartmentDto([param: Required, StringLength(100)] string Name);

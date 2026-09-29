@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using QuickHire.Domain.Enums;
 namespace QuickHire.Application.DTOs;
 
@@ -5,6 +6,7 @@ namespace QuickHire.Application.DTOs;
 
 public record ApplicantDto(
     Guid Id,
+    Guid JobPostingId,
     string FirstName,
     string LastName,
     string Email,
@@ -15,8 +17,8 @@ public record ApplicantDto(
 // what the applicant sends when applying
 
 public record CreateApplicantDto(
-    string FirstName,
-    string LastName,
-    string Email,
+    [param: Required, StringLength(100)] string FirstName,
+    [param: Required, StringLength(100)] string LastName,
+    [param: Required, EmailAddress, StringLength(320)] string Email,
     Guid JobPostingId
 );

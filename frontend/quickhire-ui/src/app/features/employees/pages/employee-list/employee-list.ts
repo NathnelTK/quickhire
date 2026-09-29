@@ -74,6 +74,11 @@ export class EmployeeListPage {
     });
   }
 
+  protected closeDialog(): void {
+    this.dialog.set(null);
+    this.load();
+  }
+
   protected remove(employee: Employee): void {
     this.employeeService.delete(employee.id).subscribe({
       next: () => {

@@ -35,6 +35,7 @@ frontend/quickhire-ui/src/app/
       departments.routes.ts
     recruitment/
       pages/                    Job openings and application screens
+        recruiter-workspace/    Protected role and applicant management
       components/               Recruitment-specific UI and forms
       data-access/              Job and applicant HTTP services
       models/                   Frontend job and applicant types
@@ -57,7 +58,7 @@ The exact filenames can follow the Angular CLI version and team conventions; kee
 
 ## Routing and Data Flow
 
-1. Register each feature's routes from `app.routes.ts` using lazy loading.
+1. Register each feature's routes from `app.routes.ts` using lazy loading. Keep public candidate browsing/application at `/jobs` and recruiter operations at the protected `/recruiter` route.
 2. Route-level pages call their feature's data-access service; components receive data and emit actions through inputs and outputs.
 3. Feature services call the API over HTTP and use feature-owned TypeScript types.
 4. Reactive forms handle client-side input and feedback. The API remains authoritative for validation and business rules.

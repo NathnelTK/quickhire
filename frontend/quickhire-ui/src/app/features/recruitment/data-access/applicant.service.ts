@@ -10,19 +10,19 @@ export class ApplicantService {
   private readonly http = inject(HttpClient);
   private readonly config = inject(API_CONFIG);
 
-  private get url(): string {
-    return `${this.config.baseUrl}/api/applicants`;
+  private get jobsUrl(): string {
+    return `${this.config.baseUrl}/api/jobs`;
   }
 
   submit(request: CreateApplicantRequest): Observable<Applicant> {
-    return this.http.post<Applicant>(this.url, request);
+    return this.http.post<Applicant>(`${this.jobsUrl}/${request.jobPostingId}/applicants`, request);
   }
 
   getByJob(jobPostingId: string): Observable<Applicant[]> {
-    return this.http.get<Applicant[]>(`${this.url}?jobPostingId=${jobPostingId}`);
+    return this.http.get<Applicant[]>(`${this.jobsUrl}/${jobPostingId}/applicants`);
   }
 
-  updateStatus(id: string, status: Applicant['status']): Observable<Applicant> {
-    return this.http.patch<Applicant>(`${this.url}/${id}/status`, { status });
+  updateStatus(jobPostingId: string, id: string, status: Applicant['status']): Observable<void> {
+    return this.http.patch<void>(`${this.jobsUrl}/${jobPostingId}/applicants/${id}/status`, { status });
   }
 }

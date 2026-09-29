@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using QuickHire.Domain.Enums;
 
 namespace QuickHire.Application.DTOs;
@@ -14,6 +15,6 @@ public record JobPostingDto(
 
 // what the Recruiter sends to create a Job
 public record CreateJobPostingDto(
-    string Title, 
-    string Description
+    [param: Required, StringLength(200)] string Title,
+    [param: Required, StringLength(10000)] string Description
 );

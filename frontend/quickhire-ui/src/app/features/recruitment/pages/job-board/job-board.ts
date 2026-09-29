@@ -42,4 +42,5 @@ export class JobBoardPage {
   protected trackById(_index: number, job: JobPosting): string {
     return job.id;
   }
+
 }

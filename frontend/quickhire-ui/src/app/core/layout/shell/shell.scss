@@ -11,6 +11,18 @@
   color: #fff;
 }
 
+.shell__signout {
+  margin-left: auto;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #c6d3d1;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .shell__brand {
   font-size: 1.125rem;
   font-weight: 600;
@@ -54,4 +66,11 @@
   flex: 1;
   padding: 1.5rem;
   min-width: 0;
+}
+
+@media (max-width: 42rem) {
+  .shell__body { flex-direction: column; }
+  .shell__nav { flex-direction: row; width: 100%; overflow-x: auto; border-right: 0; border-bottom: 1px solid #e5e7eb; }
+  .shell__nav-link { flex: 0 0 auto; }
+  .shell__content { padding: 1rem; }
 }

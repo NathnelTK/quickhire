@@ -1,12 +1,17 @@
 <header class="shell__header">
   <span class="shell__brand">QuickHire</span>
+  @if (signedIn) {
+    <button type="button" class="shell__signout" (click)="signOut()">Sign out</button>
+  } @else {
+    <a class="shell__signout" routerLink="/login">Team sign in</a>
+  }
 </header>
 
 <div class="shell__body">
   <nav class="shell__nav" aria-label="Main">
     <a
       class="shell__nav-link"
-      *ngFor="let item of navItems"
+      *ngFor="let item of navItems()"
       [routerLink]="item.path"
       routerLinkActive="shell__nav-link--active"
       >{{ item.label }}</a

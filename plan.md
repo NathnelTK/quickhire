@@ -177,23 +177,23 @@ Use this checklist during standup meetings to monitor status:
 
 - [ ] **Phase 2: Database & Core Entities**
   - [ ] PostgreSQL connected locally
-  - [ ] Initial EF Core migration generated
-  - [ ] Identity schema included in migration; JWT login returns a signed token
-  - [ ] Seed data populated
+  - [x] Initial EF Core migration generated
+  - [x] Identity schema included in additive migration; JWT login returns a signed token
+  - [x] Seed data populated
 
 - [ ] **Phase 3: APIs & Business Logic**
-  - [ ] Protected endpoints reject missing or invalid bearer tokens
-  - [ ] Employee API endpoints verified in Swagger
-  - [ ] Job Posting & Applicant endpoints verified in Swagger
+  - [x] Protected endpoints reject missing or invalid bearer tokens
+  - [x] Employee API endpoints verified against PostgreSQL
+  - [x] Job Posting & Applicant endpoints verified against PostgreSQL
   - [ ] Global exception handling middleware added
 
 - [ ] **Phase 4: Frontend & UI Integration**
-  - [ ] Angular Layout & Navigation functional
-  - [ ] Login, token interceptor, and private-route guard functional
-  - [ ] Employee CRUD views connected to API
-  - [ ] Job Posting views connected to API
+  - [x] Angular Layout & Navigation functional
+  - [x] Login, token interceptor, and private-route guard implemented
+  - [x] Employee CRUD views connected to API
+  - [x] Public jobseeker and protected recruiter workflows separated
 
 - [ ] **Phase 5: Release & Deployment**
-  - [ ] Cross-Origin Resource Sharing (CORS) configured
-  - [ ] Full end-to-end integration verified
+  - [x] Cross-Origin Resource Sharing (CORS) configured
+  - [x] Backend end-to-end workflows verified against PostgreSQL
   - [ ] Final deployment completed
