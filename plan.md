@@ -27,26 +27,15 @@
 ### Onion Architecture Layers
 
 ```
-                       ┌─────────────────────────────────┐
-                       │           Web API               │
-                       │   (Controllers, Swagger, Middleware)
-                       └────────────────┬────────────────┘
-                                        │
-                       ┌────────────────▼────────────────┐
-                       │         Infrastructure          │
-                       │ (EF Core, DbContext, Auth, Mail)│
-                       └────────────────┬────────────────┘
-                                        │
-                       ┌────────────────▼────────────────┐
-                       │          Application            │
-                       │   (Services, CQRS, DTOs, Interfaces)
-                       └────────────────┬────────────────┘
-                                        │
-                       ┌────────────────▼────────────────┐
-                       │            Domain               │
-                       │   (Entities, Enums, Interfaces) │
-                       └─────────────────────────────────┘
+QuickHire.Api ───────────────► QuickHire.Application
+  │                               │
+  └──────────────────────► QuickHire.Infrastructure
+              │
+QuickHire.Infrastructure ────────────┤
+QuickHire.Application ───────────────┴──► QuickHire.Domain
 ```
+
+Arrows indicate project references, not runtime call order. The Domain has no project references. Application references only Domain. Infrastructure references Application and Domain. API is the composition root and references Application and Infrastructure. Keep these rules in sync with [ARCHITECTURE.md](ARCHITECTURE.md).
 
 1. **Domain Layer (`QuickHire.Domain`):** No external dependencies. Contains entities (`Employee`, `Department`, `JobPosting`, `Applicant`), enums (`JobStatus`, `Role`), and custom exceptions.
 2. **Application Layer (`QuickHire.Application`):** Contains DTOs, interfaces for repositories, business service contracts, mapping profiles, and validation logic.
