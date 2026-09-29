@@ -12,7 +12,8 @@ public interface IJobService
     Task UpdateJobStatusAsync(Guid jobId, JobStatus status, CancellationToken ct = default);
 
     // Applicant Methods
-    Task<ApplicantDto> SubmitApplicationAsync(CreateApplicantDto dto, CancellationToken ct = default);
+    Task<ApplicantDto> SubmitApplicationAsync(CreateApplicantDto dto, Guid userId, CancellationToken ct = default);
     Task<IEnumerable<ApplicantDto>> GetApplicantsForJobAsync(Guid jobId, CancellationToken ct = default);
     Task UpdateApplicantStatusAsync(Guid jobId, Guid applicantId, ApplicantStatus status, CancellationToken ct = default);
+    Task<IEnumerable<ApplicantDto>> GetMyApplicationsAsync(Guid userId, CancellationToken ct = default);
 }
