@@ -1,5 +1,9 @@
 <header class="shell__header">
   <span class="shell__brand">QuickHire</span>
+  @if (user(); as currentUser) {
+    <span class="shell__account">{{ currentUser.name }}</span>
+    <button type="button" class="shell__logout" (click)="logout()">Log out</button>
+  }
 </header>
 
 <div class="shell__body">

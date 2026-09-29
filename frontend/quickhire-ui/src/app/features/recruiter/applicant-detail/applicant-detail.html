@@ -1,0 +1,46 @@
+<div class="page">
+  <a class="back" [routerLink]="['/recruiter/jobs', jobId, 'applicants']">Back to Applicants</a>
+
+  @if (loading()) {
+    <section class="card"><p>Loading application...</p></section>
+  } @else if (application(); as applicant) {
+    <header class="heading">
+      <h1>{{ applicant.name }}</h1>
+      <p>Application for {{ jobTitle() }}</p>
+    </header>
+
+    <section class="card">
+      <dl>
+        <div><dt>Email</dt><dd><a [href]="'mailto:' + applicant.email">{{ applicant.email }}</a></dd></div>
+        @if (applicant.phone) {
+          <div><dt>Phone</dt><dd><a [href]="'tel:' + applicant.phone">{{ applicant.phone }}</a></dd></div>
+        }
+        <div><dt>Applied on</dt><dd>{{ applicant.submittedAt | date: 'MMM d, y' }}</dd></div>
+        <div><dt>Status</dt><dd><span class="status">{{ applicant.status || 'Received' }}</span></dd></div>
+      </dl>
+
+      @if (applicant.resume && resumeUrl()) {
+        <section class="resume">
+          <h2>Resume / CV</h2>
+          <p>{{ applicant.resume.name }}</p>
+          <a class="button" [href]="resumeUrl()" [download]="applicant.resume.name">Download resume</a>
+        </section>
+      } @else {
+        <p class="missing-resume">No resume was attached to this application.</p>
+      }
+
+      @if (applicant.coverLetter) {
+        <section class="cover-letter">
+          <h2>Cover letter</h2>
+          <p>{{ applicant.coverLetter }}</p>
+        </section>
+      }
+    </section>
+  } @else {
+    <section class="card">
+      <h1>Application not found</h1>
+      <p class="error">{{ error() }}</p>
+      <a [routerLink]="['/recruiter/jobs', jobId, 'applicants']">Back to Applicants</a>
+    </section>
+  }
+</div>

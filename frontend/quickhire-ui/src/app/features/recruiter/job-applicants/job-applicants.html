@@ -1,0 +1,117 @@
+<div class="page">
+  <a class="back" routerLink="/recruiter/jobs">Back to My Jobs</a>
+
+  @if (loading()) {
+    <section class="panel"><p>Loading applicants...</p></section>
+  } @else if (job(); as currentJob) {
+    <header class="job-header">
+      <span class="company-icon" aria-hidden="true">{{ currentJob.company.charAt(0) }}</span>
+      <div>
+        <h1>{{ currentJob.title }}</h1>
+        <p>{{ currentJob.company }} · {{ currentJob.location }}</p>
+      </div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Job information">
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="selectedTab() === 'applicants'"
+        [class.selected]="selectedTab() === 'applicants'"
+        (click)="selectedTab.set('applicants')"
+      >
+        Applicants ({{ applicants().length }})
+      </button>
+      <button
+        type="button"
+        role="tab"
+        [attr.aria-selected]="selectedTab() === 'details'"
+        [class.selected]="selectedTab() === 'details'"
+        (click)="selectedTab.set('details')"
+      >
+        Job Details
+      </button>
+    </div>
+
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+
+    @if (selectedTab() === 'applicants') {
+      @if (applicants().length) {
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Applied On</th>
+                <th scope="col">Status</th>
+                <th scope="col"><span class="visually-hidden">Application</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (applicant of applicants(); track applicant.id) {
+                <tr>
+                  <td class="name-cell">
+                    <span class="avatar" aria-hidden="true">{{ applicantName(applicant).charAt(0).toUpperCase() }}</span>
+                    <span>{{ applicantName(applicant) }}</span>
+                  </td>
+                  <td>{{ applicant.submittedAt | date: 'MMM d, y' }}</td>
+                  <td>
+                    <span
+                      class="status"
+                      [class.interviewing]="applicantStatus(applicant) === 'Interviewing'"
+                      [class.hired]="applicantStatus(applicant) === 'Hired'"
+                      [class.rejected]="applicantStatus(applicant) === 'Rejected'"
+                    >
+                      {{ applicantStatus(applicant) }}
+                    </span>
+                  </td>
+                  <td>
+                    <a class="view-button" [routerLink]="['/recruiter/jobs', currentJob.id, 'applicants', applicant.id]">
+                      View
+                    </a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <section class="empty">
+          <h2>No applicants yet</h2>
+          <p>Applications for this job will appear here.</p>
+        </section>
+      }
+    } @else {
+      <section class="details">
+        <dl>
+          <div><dt>Company</dt><dd>{{ currentJob.company }}</dd></div>
+          <div><dt>Location</dt><dd>{{ currentJob.location }}</dd></div>
+          <div><dt>Job type</dt><dd>{{ currentJob.type }}</dd></div>
+          <div><dt>Category</dt><dd>{{ currentJob.category }}</dd></div>
+          @if (currentJob.salaryRange) {
+            <div><dt>Salary range</dt><dd>{{ currentJob.salaryRange }}</dd></div>
+          }
+          <div><dt>Status</dt><dd>{{ currentJob.status === 'active' ? 'Active' : 'Closed' }}</dd></div>
+        </dl>
+        <h2>Description</h2>
+        <p class="description">{{ currentJob.description }}</p>
+        @if (currentJob.requirements.length) {
+          <h2>Requirements</h2>
+          <ul>
+            @for (requirement of currentJob.requirements; track requirement) {
+              <li>{{ requirement }}</li>
+            }
+          </ul>
+        }
+      </section>
+    }
+  } @else {
+    <section class="panel">
+      <h1>Job not found</h1>
+      <p class="error">{{ error() }}</p>
+      <a routerLink="/recruiter/jobs">Back to My Jobs</a>
+    </section>
+  }
+</div>

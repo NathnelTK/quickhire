@@ -1,0 +1,69 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1>My Jobs</h1>
+      <p>View and manage your job postings.</p>
+    </div>
+    <a class="post-button" routerLink="/recruiter/post-job">Post a Job</a>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Job posting status">
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="selectedStatus() === 'active'"
+      [class.selected]="selectedStatus() === 'active'"
+      (click)="selectedStatus.set('active')"
+    >
+      Active <span>{{ activeCount() }}</span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="selectedStatus() === 'closed'"
+      [class.selected]="selectedStatus() === 'closed'"
+      (click)="selectedStatus.set('closed')"
+    >
+      Closed <span>{{ closedCount() }}</span>
+    </button>
+  </div>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <section class="jobs" aria-label="Loading jobs" aria-busy="true">
+      <div class="job-card skeleton"></div>
+      <div class="job-card skeleton"></div>
+    </section>
+  } @else if (filteredJobs().length) {
+    <section class="jobs" [attr.aria-label]="selectedStatus() + ' job postings'">
+      @for (job of filteredJobs(); track job.id) {
+        <article class="job-card">
+          <span class="company-icon" aria-hidden="true">{{ job.company.charAt(0) }}</span>
+          <div class="job-info">
+            <h2>{{ job.title }}</h2>
+            <p>{{ job.company }} · {{ job.location }}</p>
+            <a class="applicant-count" [routerLink]="['/recruiter/jobs', job.id, 'applicants']">
+              {{ applicantCounts().get(job.id) ?? 0 }}
+              {{ (applicantCounts().get(job.id) ?? 0) === 1 ? 'applicant' : 'applicants' }}
+            </a>
+          </div>
+          <div class="job-actions">
+            <a [routerLink]="['/jobs', job.id]">View</a>
+            <a class="manage" [routerLink]="['/recruiter/jobs', job.id, 'edit']">Manage</a>
+          </div>
+        </article>
+      }
+    </section>
+  } @else {
+    <section class="empty">
+      <h2>{{ selectedStatus() === 'active' ? 'No active jobs yet' : 'No closed jobs' }}</h2>
+      @if (selectedStatus() === 'active') {
+        <p>Your job postings will appear here after you publish them.</p>
+        <a class="post-button" routerLink="/recruiter/post-job">Post a Job</a>
+      }
+    </section>
+  }
+</div>

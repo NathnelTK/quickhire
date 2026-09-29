@@ -1,0 +1,119 @@
+<div class="landing">
+  <div class="landing__blob landing__blob--one" aria-hidden="true"></div>
+  <div class="landing__blob landing__blob--two" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="topbar__logo" href="/">
+      <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2" y="7" width="20" height="14" rx="3" fill="#4F46E5" />
+        <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" fill="none" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round" />
+        <path d="M2 12.5h20" stroke="#FFFFFF" stroke-width="1.8" />
+        <path d="M10 16h4" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+      <span>QuickHire</span>
+    </a>
+
+    <a class="topbar__login" routerLink="/login" [queryParams]="{ role: 'JobSeeker' }">Login</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <p class="hero__eyebrow hero__reveal" style="--reveal-order: 1">
+            Find Your Next Opportunity
+          </p>
+
+          <h1 class="hero__title">
+            <span class="hero__word" style="--word-order: 1">Find</span>&nbsp;
+            <span class="hero__word" style="--word-order: 2">Your</span>&nbsp;
+            <span class="hero__word" style="--word-order: 3">Dream</span>&nbsp;
+            <span class="hero__word" style="--word-order: 4">Job.</span><br />
+            <span class="hero__word" style="--word-order: 5">Start</span>&nbsp;
+            <span class="hero__word" style="--word-order: 6">Your</span>&nbsp;
+            <span class="hero__word" style="--word-order: 7">Next</span>&nbsp;
+            <span class="hero__word" style="--word-order: 8">Chapter.</span>
+          </h1>
+
+          <p class="hero__description hero__reveal" style="--reveal-order: 2">
+            Discover opportunities that match your skills and take the next step in your career.
+          </p>
+
+          <div class="hero__actions hero__reveal" style="--reveal-order: 3">
+            <a class="button button--primary" routerLink="/register" [queryParams]="{ role: 'JobSeeker' }">
+              Find a Job
+              <svg class="button__arrow" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11M11 5.5 15.5 10 11 14.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+
+            <a class="button button--outline" routerLink="/register" [queryParams]="{ role: 'Recruiter' }">
+              I'm a Recruiter
+              <svg class="button__arrow" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11M11 5.5 15.5 10 11 14.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <img
+            class="hero__illustration"
+            src="/quickhire-hero-illustration.png"
+            alt="Job seekers exploring opportunities with QuickHire"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="QuickHire by the numbers">
+      @for (stat of stats; track stat.label) {
+        <div class="stat">
+          <span class="stat__value">{{ stat.value }}</span>
+          <span class="stat__label">{{ stat.label }}</span>
+        </div>
+      }
+    </section>
+
+    <section class="features" aria-label="Features">
+      @for (feature of features; track feature.title) {
+        <article class="feature">
+          <span class="feature__icon">
+            @switch (feature.icon) {
+              @case ('search') {
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8" />
+                  <path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+              }
+              @case ('send') {
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20.5 3.5 10.5 13.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  <path d="M20.5 3.5 14 20.5l-3.5-7-7-3.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+              }
+              @case ('chart') {
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  <path d="M7 20v-6M12 20V7M17 20v-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+              }
+            }
+          </span>
+          <h3 class="feature__title">{{ feature.title }}</h3>
+          <p class="feature__description">{{ feature.description }}</p>
+        </article>
+      }
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p class="footer__copy">&copy; 2026 QuickHire. All rights reserved.</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </footer>
+</div>

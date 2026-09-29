@@ -1,0 +1,173 @@
+<app-auth-shell [panelText]="panelText()" [compact]="true">
+  <div class="auth__title-block">
+    <h1 class="auth__heading">Create your account</h1>
+  </div>
+
+  <div class="auth__role">
+    <span class="auth__pill">{{ roleLabel() }}</span>
+    <button class="auth__change" type="button" (click)="changeRole()">Change</button>
+  </div>
+
+  <p class="field__hint" role="status">
+    Account registration is not available yet. The backend currently supports sign-in for existing accounts only.
+  </p>
+
+  <form class="auth__fields" [formGroup]="form" novalidate>
+
+    <div class="field">
+      <label class="field__label" for="register-name">Full name</label>
+      <div class="field__control">
+        <input
+          class="field__input"
+          [class.field__input--invalid]="showError('name')"
+          id="register-name"
+          name="name"
+          type="text"
+          formControlName="name"
+          placeholder="Jane Cooper"
+          autocomplete="name"
+          [attr.aria-invalid]="showError('name')"
+          [attr.aria-describedby]="showError('name') ? 'register-name-error' : null"
+        />
+      </div>
+      @if (showError('name')) {
+        <p class="field__error" id="register-name-error">{{ errorFor('name') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-email">Email</label>
+      <div class="field__control">
+        <input
+          class="field__input"
+          [class.field__input--invalid]="showError('email')"
+          id="register-email"
+          name="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          [attr.aria-invalid]="showError('email')"
+          [attr.aria-describedby]="showError('email') ? 'register-email-error' : null"
+        />
+      </div>
+      @if (showError('email')) {
+        <p class="field__error" id="register-email-error">{{ errorFor('email') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-password">Password</label>
+      <div class="field__control">
+        <input
+          class="field__input field__input--password"
+          [class.field__input--invalid]="showError('password')"
+          id="register-password"
+          name="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          [attr.aria-invalid]="showError('password')"
+          [attr.aria-describedby]="showError('password') ? 'register-password-error' : 'register-password-hint'"
+        />
+        <button
+          class="field__reveal"
+          type="button"
+          (click)="togglePassword()"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        >
+          @if (showPassword()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 3l18 18" stroke-linecap="round" />
+              <path d="M10.6 6.2A9.6 9.6 0 0 1 12 6c5 0 9 4.5 9 6 0 .8-.9 2.2-2.3 3.4M6.4 7.8C4.2 9.1 3 10.7 3 12c0 1.5 4 6 9 6 1 0 2-.2 2.8-.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M9.9 10a3 3 0 0 0 4.2 4.2" stroke-linecap="round" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 12s4-6 9-6 9 6 9 6-4 6-9 6-9-6-9-6z" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="2.8" />
+            </svg>
+          }
+        </button>
+      </div>
+      @if (showError('password')) {
+        <p class="field__error" id="register-password-error">{{ errorFor('password') }}</p>
+      } @else {
+        <p class="field__hint" id="register-password-hint">At least 6 characters</p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="register-confirm-password">Confirm password</label>
+      <div class="field__control">
+        <input
+          class="field__input field__input--password"
+          [class.field__input--invalid]="showError('confirmPassword')"
+          id="register-confirm-password"
+          name="confirmPassword"
+          [type]="showConfirmPassword() ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="Re-enter your password"
+          autocomplete="new-password"
+          [attr.aria-invalid]="showError('confirmPassword')"
+          [attr.aria-describedby]="showError('confirmPassword') ? 'register-confirm-password-error' : null"
+        />
+        <button
+          class="field__reveal"
+          type="button"
+          (click)="toggleConfirmPassword()"
+          [attr.aria-label]="showConfirmPassword() ? 'Hide password' : 'Show password'"
+        >
+          @if (showConfirmPassword()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 3l18 18" stroke-linecap="round" />
+              <path d="M10.6 6.2A9.6 9.6 0 0 1 12 6c5 0 9 4.5 9 6 0 .8-.9 2.2-2.3 3.4M6.4 7.8C4.2 9.1 3 10.7 3 12c0 1.5 4 6 9 6 1 0 2-.2 2.8-.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M9.9 10a3 3 0 0 0 4.2 4.2" stroke-linecap="round" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 12s4-6 9-6 9 6 9 6-4 6-9 6-9-6-9-6z" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="2.8" />
+            </svg>
+          }
+        </button>
+      </div>
+      @if (showError('confirmPassword')) {
+        <p class="field__error" id="register-confirm-password-error">{{ errorFor('confirmPassword') }}</p>
+      }
+    </div>
+
+    <div class="auth__reveal-field" [class.auth__reveal-field--open]="role() === 'Recruiter'">
+      <div>
+        <div class="field">
+          <label class="field__label" for="register-company">Company name</label>
+          <div class="field__control">
+            <input
+              class="field__input"
+              [class.field__input--invalid]="showError('company')"
+              id="register-company"
+              name="company"
+              type="text"
+              formControlName="company"
+              placeholder="Acme Inc."
+              autocomplete="organization"
+              [attr.aria-invalid]="showError('company')"
+              [attr.aria-describedby]="showError('company') ? 'register-company-error' : null"
+            />
+          </div>
+          @if (showError('company')) {
+            <p class="field__error" id="register-company-error">{{ errorFor('company') }}</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <button class="auth__submit" type="button" disabled>Sign up unavailable</button>
+  </form>
+
+  <p class="auth__foot">
+    Already have an account?
+    <a class="auth__link auth__link--strong" routerLink="/login" [queryParams]="loginQueryParams">Log in</a>
+  </p>
+</app-auth-shell>

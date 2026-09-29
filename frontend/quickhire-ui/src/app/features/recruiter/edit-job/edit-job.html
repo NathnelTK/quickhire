@@ -1,0 +1,89 @@
+<div class="page">
+  <a class="back" routerLink="/recruiter/jobs">Back to My Jobs</a>
+
+  @if (loading()) {
+    <section class="card"><p>Loading job...</p></section>
+  } @else if (job()) {
+    <h1>Manage Job</h1>
+    <p class="sub">Update your job posting details.</p>
+
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="title">Job Title</label>
+        <input id="title" type="text" formControlName="title" />
+        @if (showError(form.controls.title)) { <span class="error" role="alert">Job title is required</span> }
+      </div>
+
+      <div class="field">
+        <label for="company">Company Name</label>
+        <input id="company" type="text" formControlName="company" />
+        @if (showError(form.controls.company)) { <span class="error" role="alert">Company name is required</span> }
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" type="text" formControlName="location" />
+        @if (showError(form.controls.location)) { <span class="error" role="alert">Location is required</span> }
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label for="type">Job Type</label>
+          <select id="type" formControlName="type">
+            @for (type of types; track type) { <option [value]="type">{{ type }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" formControlName="category">
+            @for (category of categories; track category) { <option [value]="category">{{ category }}</option> }
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="salary">Salary Range <span class="opt">(optional)</span></label>
+        <input id="salary" type="text" formControlName="salaryRange" placeholder="e.g. $60,000 - $90,000 per year" />
+      </div>
+
+      <div class="field">
+        <label for="status">Posting Status</label>
+        <select id="status" formControlName="status">
+          <option value="active">Active</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" rows="6" formControlName="description"></textarea>
+        @if (showError(form.controls.description)) {
+          <span class="error" role="alert">
+            {{ form.controls.description.hasError('required') ? 'Description is required' : 'Please write at least 20 characters' }}
+          </span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="requirements">Requirements <span class="opt">(optional)</span></label>
+        <textarea id="requirements" rows="4" formControlName="requirements"></textarea>
+        <span class="hint">One requirement per line</span>
+      </div>
+
+      @if (error()) { <p class="error big" role="alert">{{ error() }}</p> }
+
+      <div class="actions">
+        <button type="submit" class="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : 'Save Changes' }}
+        </button>
+        <a class="btn secondary" routerLink="/recruiter/jobs">Cancel</a>
+      </div>
+    </form>
+  } @else {
+    <section class="card">
+      <h1>Job not found</h1>
+      <p class="sub">{{ error() }}</p>
+      <a class="btn" routerLink="/recruiter/jobs">Back to My Jobs</a>
+    </section>
+  }
+</div>

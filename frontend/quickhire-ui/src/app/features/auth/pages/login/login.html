@@ -1,0 +1,101 @@
+<app-auth-shell [panelText]="panelText()">
+  <div class="auth__title-block">
+    <h1 class="auth__heading">Welcome back!</h1>
+    <p class="auth__subtitle">Log in to your account</p>
+    <p class="auth__subtitle">
+      Signing in as {{ role() === 'Recruiter' ? 'a recruiter' : 'a jobseeker' }}.
+      <button class="auth__link" type="button" (click)="changeRole()">
+        Switch to {{ role() === 'Recruiter' ? 'jobseeker' : 'recruiter' }}
+      </button>
+    </p>
+  </div>
+
+  <form class="auth__fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label class="field__label" for="login-email">Email</label>
+      <div class="field__control">
+        <input
+          class="field__input"
+          [class.field__input--invalid]="showError('email')"
+          id="login-email"
+          name="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          [attr.aria-invalid]="showError('email')"
+          [attr.aria-describedby]="showError('email') ? 'login-email-error' : null"
+        />
+      </div>
+      @if (showError('email')) {
+        <p class="field__error" id="login-email-error">{{ errorFor('email') }}</p>
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="login-password">Password</label>
+      <div class="field__control">
+        <input
+          class="field__input field__input--password"
+          [class.field__input--invalid]="showError('password')"
+          id="login-password"
+          name="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          [attr.aria-invalid]="showError('password')"
+          [attr.aria-describedby]="showError('password') ? 'login-password-error' : null"
+        />
+        <button
+          class="field__reveal"
+          type="button"
+          (click)="togglePassword()"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        >
+          @if (showPassword()) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 3l18 18" stroke-linecap="round" />
+              <path d="M10.6 6.2A9.6 9.6 0 0 1 12 6c5 0 9 4.5 9 6 0 .8-.9 2.2-2.3 3.4M6.4 7.8C4.2 9.1 3 10.7 3 12c0 1.5 4 6 9 6 1 0 2-.2 2.8-.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M9.9 10a3 3 0 0 0 4.2 4.2" stroke-linecap="round" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M3 12s4-6 9-6 9 6 9 6-4 6-9 6-9-6-9-6z" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="2.8" />
+            </svg>
+          }
+        </button>
+      </div>
+      @if (showError('password')) {
+        <p class="field__error" id="login-password-error">{{ errorFor('password') }}</p>
+      }
+    </div>
+
+    <div class="auth__row">
+      <label class="auth__remember">
+        <input type="checkbox" formControlName="remember" />
+        <span>Remember me</span>
+      </label>
+      <button class="auth__link" type="button">Forgot password?</button>
+    </div>
+
+    @if (requestError()) {
+      <p class="field__error" role="alert">{{ requestError() }}</p>
+    }
+
+    <button class="auth__submit" type="submit" [disabled]="submitting()">
+      @if (submitting()) {
+        <span class="auth__spinner" aria-hidden="true"></span>
+        <span>Logging in...</span>
+      } @else {
+        <span>Log In</span>
+      }
+    </button>
+  </form>
+
+  <p class="auth__foot">
+    Don't have an account?
+    <a class="auth__link auth__link--strong" [routerLink]="['/register']" [queryParams]="signupQueryParams">Sign up</a>
+  </p>
+</app-auth-shell>

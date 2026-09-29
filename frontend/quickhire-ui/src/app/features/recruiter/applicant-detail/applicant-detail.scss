@@ -1,0 +1,20 @@
+:host { display: block; }
+.page { max-width: 760px; margin: 0 auto; font-family: 'Inter', system-ui, sans-serif; }
+.back { display: inline-block; margin-bottom: 18px; color: #4f46e5; font-size: 14px; text-decoration: none; }
+.heading { margin-bottom: 20px; }
+h1 { margin: 0; color: #172554; font-size: 24px; }
+.heading p { margin: 6px 0 0; color: #64748b; font-size: 14px; }
+.card { padding: 24px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; }
+dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 0; }
+dt { color: #64748b; font-size: 12px; }
+dd { margin: 5px 0 0; color: #172554; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+dd a { color: inherit; }
+h2 { margin: 0 0 8px; color: #172554; font-size: 16px; }
+.resume, .cover-letter { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+.resume p, .cover-letter p { color: #475569; font-size: 14px; line-height: 1.6; }
+.button { display: inline-flex; min-height: 40px; align-items: center; padding: 0 14px; border-radius: 9px; background: #4f46e5; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; }
+.button:hover { background: #4338ca; }
+.status { color: #047857; }
+.missing-resume, .error { color: #b91c1c; font-size: 14px; }
+:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+@media (max-width: 560px) { dl { grid-template-columns: 1fr; } .card { padding: 18px; } }

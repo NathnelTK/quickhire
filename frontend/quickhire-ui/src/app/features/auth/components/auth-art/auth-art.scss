@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  animation: auth-float 6s ease-in-out infinite;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes auth-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    animation: none;
+  }
+}

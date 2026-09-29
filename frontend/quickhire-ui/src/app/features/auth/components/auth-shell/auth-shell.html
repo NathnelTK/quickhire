@@ -1,0 +1,34 @@
+<div class="auth">
+  <div aria-hidden="true">
+    <span class="auth__circle auth__circle--one"></span>
+    <span class="auth__circle auth__circle--two"></span>
+  </div>
+
+  <div class="auth__container">
+    <a class="auth__logo" routerLink="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2" y="7" width="20" height="14" rx="3" fill="#4F46E5" />
+        <path
+          d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"
+          fill="none"
+          stroke="#4F46E5"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+        <path d="M2 12.5h20" stroke="#FFFFFF" stroke-width="1.8" />
+        <path d="M10 16h4" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+      <span>QuickHire</span>
+    </a>
+
+    @if (panelText()) {
+      <p class="auth__title">{{ panelText() }}</p>
+    }
+
+    <main class="auth__main">
+      <div class="auth__form">
+        <ng-content />
+      </div>
+    </main>
+  </div>
+</div>
