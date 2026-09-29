@@ -1,0 +1,21 @@
+<header class="shell__header">
+  <span class="shell__brand">QuickHire</span>
+</header>
+
+<div class="shell__body">
+  <nav class="shell__nav" aria-label="Main">
+    <a
+      class="shell__nav-link"
+      *ngFor="let item of navItems"
+      [routerLink]="item.path"
+      routerLinkActive="shell__nav-link--active"
+      >{{ item.label }}</a
+    >
+  </nav>
+
+  <main class="shell__content">
+    <ng-content />
+  </main>
+</div>
+
+<app-toast-container />

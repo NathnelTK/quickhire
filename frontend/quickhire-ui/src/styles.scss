@@ -1,0 +1,19 @@
+@use './styles/forms';
+@use './styles/buttons';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #111827;
+  background: #f9fafb;
+  line-height: 1.5;
+}

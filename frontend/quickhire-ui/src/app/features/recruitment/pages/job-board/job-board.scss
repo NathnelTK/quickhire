@@ -1,0 +1,85 @@
+.page__header {
+  margin-bottom: 1.25rem;
+}
+
+.page__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.625rem;
+}
+
+.card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+.badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge--closed {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.card__description {
+  flex: 1;
+  margin: 0 0 1rem;
+  color: #4b5563;
+  font-size: 0.9375rem;
+}
+
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card__posted {
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
+.state {
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  color: #4b5563;
+  text-align: center;
+}
+
+.state--error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
