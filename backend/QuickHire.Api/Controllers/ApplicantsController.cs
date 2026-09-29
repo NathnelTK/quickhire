@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using QuickHire.Application.DTOs;
 using QuickHire.Application.Interfaces;
 using QuickHire.Domain.Enums;
+using System.Security.Claims;
 
 namespace QuickHire.Api.Controllers;
 
@@ -28,7 +29,7 @@ public class ApplicantsController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
+    [Authorize(Roles = "JobSeeker")]
     public async Task<IActionResult> Apply(Guid jobId, [FromBody] CreateApplicantDto dto, CancellationToken ct)
     {
         if (jobId != dto.JobPostingId)
@@ -36,9 +37,15 @@ public class ApplicantsController : ControllerBase
             return BadRequest("Job ID in URL does not match Job ID in payload.");
         }
 
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token." });
+        }
+
         try
         {
-            var applicant = await _jobService.SubmitApplicationAsync(dto, ct);
+            var applicant = await _jobService.SubmitApplicationAsync(dto, userId, ct);
             return Created($"/api/jobs/{jobId}/applicants", applicant);
         }
         catch (KeyNotFoundException)
@@ -72,5 +79,19 @@ public class ApplicantsController : ControllerBase
             return BadRequest("Unknown applicant status.");
         }
         return NoContent();
+    }
+
+    [HttpGet("~/api/jobs/my-applications")]
+    [Authorize(Roles = "JobSeeker")]
+    public async Task<ActionResult<IEnumerable<ApplicantDto>>> GetMyApplications(CancellationToken ct)
+    {
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+        {
+            return Unauthorized(new { message = "User ID not found in token." });
+        }
+
+        var applications = await _jobService.GetMyApplicationsAsync(userId, ct);
+        return Ok(applications);
     }
 }

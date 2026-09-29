@@ -17,9 +17,11 @@ public sealed class DatabaseSeeder(
         await EnsureRoleAsync("Administrator");
         await EnsureRoleAsync("Recruiter");
         await EnsureRoleAsync("Employee");
+        await EnsureRoleAsync("JobSeeker");
         await EnsureDemoUserAsync("admin@quickhire.local", "Avery", "Admin", "Administrator", demoPassword);
         await EnsureDemoUserAsync("recruiter@quickhire.local", "Riley", "Recruiter", "Recruiter", demoPassword);
         await EnsureDemoUserAsync("employee@quickhire.local", "Elliot", "Employee", "Employee", demoPassword);
+        await EnsureDemoUserAsync("jobseeker@quickhire.local", "Jordan", "JobSeeker", "JobSeeker", demoPassword);
 
         if (await dbContext.Departments.AnyAsync(cancellationToken))
         {

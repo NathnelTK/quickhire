@@ -59,7 +59,7 @@ public class JobService : IJobService
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task<ApplicantDto> SubmitApplicationAsync(CreateApplicantDto dto, CancellationToken ct = default)
+    public async Task<ApplicantDto> SubmitApplicationAsync(CreateApplicantDto dto, Guid userId, CancellationToken ct = default)
     {
         var job = await _context.JobPostings.SingleOrDefaultAsync(j => j.Id == dto.JobPostingId, ct);
         if (job is null) throw new KeyNotFoundException("Job not found.");
@@ -76,6 +76,7 @@ public class JobService : IJobService
             LastName = dto.LastName.Trim(),
             Email = dto.Email.Trim(),
             JobPostingId = dto.JobPostingId,
+            UserId = userId,
             Status = ApplicantStatus.Received,
             AppliedAt = DateTimeOffset.UtcNow
         };
@@ -109,5 +110,13 @@ public class JobService : IJobService
 
         applicant.Status = status;
         await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task<IEnumerable<ApplicantDto>> GetMyApplicationsAsync(Guid userId, CancellationToken ct = default)
+    {
+        return await _context.Applicants
+            .Where(a => a.UserId == userId)
+            .Select(a => new ApplicantDto(a.Id, a.JobPostingId, a.FirstName, a.LastName, a.Email, a.Status, a.AppliedAt))
+            .ToListAsync(ct);
     }
 }

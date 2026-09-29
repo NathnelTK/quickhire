@@ -19,4 +19,6 @@ public class Applicant
     public Guid JobPostingId { get; set; }
 
     public JobPosting JobPosting { get; set; } = null!;
+    
+    public Guid UserId { get; set; }
 }

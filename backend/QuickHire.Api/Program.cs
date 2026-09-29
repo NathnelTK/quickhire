@@ -7,6 +7,7 @@ using QuickHire.Infrastructure;
 using QuickHire.Infrastructure.Services;
 using QuickHire.Infrastructure.Persistence;
 using QuickHire.Infrastructure.Security;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,7 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
