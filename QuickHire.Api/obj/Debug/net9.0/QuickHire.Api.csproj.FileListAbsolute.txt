@@ -1,0 +1,9 @@
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.csproj.AssemblyReference.cache
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.AssemblyInfoInputs.cache
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.AssemblyInfo.cs
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.csproj.CoreCompileInputs.cache
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\user\QuickHire\QuickHire.Api\obj\Debug\net9.0\QuickHire.Api.sourcelink.json

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="QuickHire.Api/QuickHire.Api.csproj" />
+  <Project Path="QuickHire.Application/QuickHire.Application.csproj" />
+  <Project Path="QuickHire.Domain/QuickHire.Domain.csproj" />
+  <Project Path="QuickHire.Infrastructure/QuickHire.Infrastructure.csproj" />
+</Solution>

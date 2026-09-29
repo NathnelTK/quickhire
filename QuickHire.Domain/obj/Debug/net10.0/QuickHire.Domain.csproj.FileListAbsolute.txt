@@ -1,0 +1,11 @@
+C:\Users\user\QuickHire\QuickHire.Domain\bin\Debug\net10.0\QuickHire.Domain.deps.json
+C:\Users\user\QuickHire\QuickHire.Domain\bin\Debug\net10.0\QuickHire.Domain.dll
+C:\Users\user\QuickHire\QuickHire.Domain\bin\Debug\net10.0\QuickHire.Domain.pdb
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.AssemblyInfoInputs.cache
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.AssemblyInfo.cs
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.csproj.CoreCompileInputs.cache
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.dll
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\refint\QuickHire.Domain.dll
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\QuickHire.Domain.pdb
+C:\Users\user\QuickHire\QuickHire.Domain\obj\Debug\net10.0\ref\QuickHire.Domain.dll
